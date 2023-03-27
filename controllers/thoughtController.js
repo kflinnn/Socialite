@@ -52,15 +52,41 @@ module.exports = {
       )
       .catch((err) => res.status(500).json(err));
   },
+  //Create a reaction
+  createReaction(req, res) {
+    console.log('You have created a reaction!');
+    console.log(req.body);
+    Thought.findOneAndUpdate(
+      { _id: req.params.thoughtId},
+      { $pull: { reaction: { reactionId: req.params.reactionId } } },
+      { runValidators: true, new: true }
+    )
+      .then((thought) =>
+      !thought
+        ? res
+            .status(404)
+            .json({ messages: "No thought found with that ID :("})
+        : res.json(thought)
+      )
+      .catch((err) => res.status(500).json(err));
+  },
+  
+    //Delete a reaction
+  removeReaction (req, res) {
+    console.log('You have removed your reaction!')
+    Thought.findOneAndUpdate(
+      { _id: req.params.thoughtId},
+      { $pull: { reaction: { reactionId: req.params.reactionId } } },
+      { runValidators: true, new: true }
+    )
+      .then((thought) =>
+      !thought
+        ? res
+            .status(404)
+            .json({ messages: "No thought found with that ID :("})
+        : res.json(thought)
+      )
+      .catch((err) => res.status(500).json(err));
+  },
 };
 
-
-//Create a reaction
-createReaction(req, res) {
-
-};
-
-//Update a reaction
-
-
-//Delete a reaction
