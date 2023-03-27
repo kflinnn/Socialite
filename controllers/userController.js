@@ -26,7 +26,6 @@ module.exports = {
   // Get a single user and populate thoughts and friends
   getSingleUser(req, res) {
     User.findOne({ _id: req.params.userId })
-      .select('-__v')
       .populate('thoughts')
       .populate('friends')
       .then(async (user) =>
