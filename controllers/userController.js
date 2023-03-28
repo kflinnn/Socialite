@@ -32,7 +32,8 @@ module.exports = {
           ? res.status(404).json({ message: 'No user with that ID' })
           : res.json({
               user,
-              grade: await grade(req.params.userId), //this needs updating
+              friends,
+              thoughts,
             })
       )
       .catch((err) => {
@@ -53,11 +54,7 @@ module.exports = {
       .then((user) =>
         !user
           ? res.status(404).json({ message: 'No such user exists' })
-          : Thought.findOneAndUpdate(
-              { users: req.params.userId },
-              { $pull: { users: req.params.userId } },
-              { new: true }
-            )
+          : Thought.deleteMany({thoughts: { $in: user.thoughts } })
       )
       .then((thought) =>
         !thought

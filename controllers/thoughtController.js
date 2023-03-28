@@ -73,13 +73,10 @@ module.exports = {
   },
   //Create a reaction
   createReaction(req, res) {
-    Reaction.create(req.body)
-    .then((reaction ))
-    console.log('You have created a reaction!');
-    console.log(req.body);
     Thought.findOneAndUpdate(
       { _id: req.params.thoughtId},
-      { $addToSet: { reactions: reaction._id } } ,
+      { $addToSet: { reactions: req.body } },
+      { runValidators: true, new: true }
     )
       .then((thought) =>
       !thought
@@ -96,7 +93,7 @@ module.exports = {
     console.log('You have removed your reaction!')
     Thought.findOneAndUpdate(
       { _id: req.params.thoughtId},
-      { $pull: { reaction: { reactionId: req.params.reactionId } } },
+      { $pull: { reactions: { reactionId: req.params.reactionId } } },
       { runValidators: true, new: true }
     )
       .then((thought) =>
