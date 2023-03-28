@@ -10,7 +10,6 @@ module.exports = {
   // Get all users
   getUsers(req, res) {
     User.find()
-    .populate('thoughts')
       .then(async (users) => {
         const userObj = {
           users,
@@ -33,7 +32,7 @@ module.exports = {
           ? res.status(404).json({ message: 'No user with that ID' })
           : res.json({
               user,
-              grade: await grade(req.params.userId),
+              grade: await grade(req.params.userId), //this needs updating
             })
       )
       .catch((err) => {
@@ -47,6 +46,7 @@ module.exports = {
       .then((user) => res.json(user))
       .catch((err) => res.status(500).json(err));
   },
+
   // Delete a user and remove their thoughts
   deleteUser(req, res) {
     User.findOneAndRemove({ _id: req.params.userId })
@@ -79,7 +79,7 @@ module.exports = {
     User.findOneAndUpdate(
       { _id: req.params.userId },
       { $addToSet: { friends: req.body } },
-      { runValidators: true, new: true }
+      { new: true }
     )
       .then((user) =>
         !user
